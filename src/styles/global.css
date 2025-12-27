@@ -1,0 +1,166 @@
+@import "tailwindcss";
+@import "@fontsource/inter/index.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #f4f4f5;
+  --color-zinc-200: #e4e4e7;
+  --color-zinc-300: #d4d4d8;
+  --color-zinc-400: #a1a1aa;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #52525b;
+  --color-zinc-700: #3f3f46;
+  --color-zinc-800: #27272a;
+  --color-zinc-900: #18181b;
+  --color-zinc-950: #09090b;
+}
+
+@layer base {
+  :root {
+    --background: var(--color-zinc-950);
+    --foreground: var(--color-zinc-50);
+  }
+
+  * {
+    @apply border-zinc-800;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] font-sans antialiased;
+  }
+
+  /* Font loading optimization */
+  @font-face {
+    font-family: "Inter";
+    font-display: swap;
+  }
+}
+
+@layer utilities {
+  .container-compact {
+    @apply max-w-2xl mx-auto px-6;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Markdown/Prose Styles */
+  .markdown {
+    @apply text-zinc-400 leading-relaxed;
+  }
+
+  .markdown > * + * {
+    @apply mt-6;
+  }
+
+  .markdown h1 {
+    @apply text-4xl font-bold text-zinc-50 tracking-tight mt-10 mb-6 leading-tight;
+  }
+
+  .markdown h2 {
+    @apply text-3xl font-bold text-zinc-50 tracking-tight mt-10 mb-4 leading-tight;
+  }
+
+  .markdown h3 {
+    @apply text-2xl font-semibold text-zinc-50 tracking-tight mt-8 mb-3 leading-snug;
+  }
+
+  .markdown h4 {
+    @apply text-xl font-semibold text-zinc-50 tracking-tight mt-6 mb-3 leading-snug;
+  }
+
+  .markdown p {
+    @apply text-base leading-relaxed mb-4;
+  }
+
+  .markdown p:last-child {
+    @apply mb-0;
+  }
+
+  .markdown a {
+    @apply text-zinc-300 underline underline-offset-2 decoration-zinc-700 hover:text-zinc-50 hover:decoration-zinc-500 transition-colors;
+  }
+
+  .markdown strong {
+    @apply font-semibold text-zinc-50;
+  }
+
+  .markdown em {
+    @apply italic;
+  }
+
+  .markdown ul,
+  .markdown ol {
+    @apply my-6 space-y-2;
+  }
+
+  .markdown ul {
+    @apply list-disc list-outside ml-6;
+  }
+
+  .markdown ol {
+    @apply list-decimal list-outside ml-6;
+  }
+
+  .markdown li {
+    @apply pl-2 leading-relaxed;
+  }
+
+  .markdown li > p {
+    @apply mt-2 mb-2;
+  }
+
+  .markdown blockquote {
+    @apply border-l-4 border-zinc-700 pl-4 my-6 italic text-zinc-500;
+  }
+
+  .markdown blockquote p {
+    @apply mb-0;
+  }
+
+  .markdown code {
+    @apply px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300 text-sm font-mono border border-zinc-800;
+  }
+
+  .markdown pre {
+    @apply bg-zinc-900 border border-zinc-800 rounded-lg p-4 my-6 overflow-x-auto;
+  }
+
+  .markdown pre code {
+    @apply bg-transparent border-0 p-0 text-sm;
+  }
+
+  .markdown hr {
+    @apply my-8 border-t border-zinc-800;
+  }
+
+  .markdown img {
+    @apply rounded-lg my-6 w-full;
+  }
+
+  .markdown table {
+    @apply w-full my-6 border-collapse;
+  }
+
+  .markdown th {
+    @apply border border-zinc-800 bg-zinc-900 px-4 py-2 text-left font-semibold text-zinc-50;
+  }
+
+  .markdown td {
+    @apply border border-zinc-800 px-4 py-2;
+  }
+
+  .markdown tr:nth-child(even) {
+    @apply bg-zinc-900/50;
+  }
+}

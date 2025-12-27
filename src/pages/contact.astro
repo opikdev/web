@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_AUTHOR_EMAIL, SITE_AUTHOR_X_URL, SITE_AUTHOR_LINKEDIN_URL, SITE_URL } from '../consts/site';
+---
+
+<Layout title="Get in Touch" description="Get in touch with Opik - Let's connect and discuss your next project.">
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "ContactPage",
+		"name": "Contact",
+		"description": "Get in touch with Opik - Let's connect and discuss your next project.",
+		"url": `${SITE_URL}/contact`,
+		"inLanguage": "en-US"
+	})} />
+	
+	<article class="space-y-8">
+		<header>
+			<h1 class="text-3xl font-bold tracking-tighter sm:text-4xl">Contact</h1>
+			<p class="text-lg text-zinc-400 mt-4">
+				Have a project in mind or just want to say hi? Feel free to reach out to me via email or through my social channels.
+			</p>
+		</header>
+		
+		<div class="space-y-6">
+			<div class="space-y-2">
+				<h2 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Email</h2>
+				<a href={`mailto:${SITE_AUTHOR_EMAIL}`} class="text-xl font-medium text-zinc-400 hover:text-zinc-50 transition-colors underline decoration-zinc-800 underline-offset-4 hover:decoration-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
+					{SITE_AUTHOR_EMAIL}
+				</a>
+			</div>
+			
+			<div class="space-y-2">
+				<h2 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Socials</h2>
+				<div class="flex gap-4 flex-wrap">
+					<a href={SITE_AUTHOR_X_URL} target="_blank" rel="noopener noreferrer me" class="text-lg font-medium text-zinc-400 hover:text-zinc-50 transition-colors underline decoration-zinc-800 underline-offset-4 hover:decoration-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
+						X (Twitter)
+					</a>
+					<a href={SITE_AUTHOR_LINKEDIN_URL} target="_blank" rel="noopener noreferrer me" class="text-lg font-medium text-zinc-400 hover:text-zinc-50 transition-colors underline decoration-zinc-800 underline-offset-4 hover:decoration-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
+						LinkedIn
+					</a>
+				</div>
+			</div>
+		</div>
+	</article>
+</Layout>

@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE_URL } from '../consts/site';
+---
+
+<Layout title="About Me" description="Learn more about Opik - Software engineer focused on modern web development, AI integration, and building with strong technical and business judgment.">
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "AboutPage",
+		"name": "About Me",
+		"description": "Learn more about Opik - Software engineer focused on modern web development, AI integration, and building with strong technical and business judgment.",
+		"url": `${SITE_URL}/about`,
+		"inLanguage": "en-US"
+	})} />
+	
+	<article class="space-y-8">
+		<header>
+			<h1 class="text-3xl font-bold tracking-tighter sm:text-4xl">About Me</h1>
+		</header>
+		
+	<div class="prose prose-zinc dark:prose-invert text-zinc-400 space-y-4 max-w-none">
+		<p>
+			I'm a software engineer who enjoys building clean, modern web applications and experimenting with AI in a practical way. 
+			My current interest is LLM integration and AI tools, not as hype, but as building blocks for better web products.
+		</p>
+
+		<p>
+			I believe AI is leverage. It will change how we build web applications and how businesses operate. 
+			What matters to me is using it with good judgment: knowing what should be automated, what should stay human, 
+			and what is actually worth shipping.
+		</p>
+
+		<p>
+			I like working at the intersection of technical and non-technical decisions. A strong solution is not only correct in code. 
+			It is also clear in scope, sensible in tradeoffs, and aligned with the problem and the people it affects.
+		</p>
+		
+		<h2 class="text-xl font-semibold text-zinc-50 pt-4">Technical Skills</h2>
+		<ul class="list-disc list-outside ml-6 space-y-2.5">
+			<li><strong class="text-zinc-50">Frontend:</strong> React, Next.js, Vue, Nuxt, Astro, Tailwind CSS</li>
+			<li><strong class="text-zinc-50">Backend & Full-stack:</strong> TypeScript, Node.js, REST APIs, Supabase, Prisma, WebSockets</li>
+			<li><strong class="text-zinc-50">AI Integration:</strong> LLM APIs, AI tools, prompt engineering</li>
+			<li><strong class="text-zinc-50">Architecture & Design:</strong> system architecture, UI/UX design, technical standards</li>
+		</ul>
+		
+		<p class="pt-4">
+			Beyond the tools, I care about clarity. Good web applications come from solid architecture, good design taste, 
+			and the ability to make critical calls when the answer is not obvious.
+		</p>
+	</div>
+	</article>
+</Layout>

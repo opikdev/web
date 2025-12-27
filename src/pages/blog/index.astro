@@ -1,0 +1,340 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { SITE_URL } from '../../consts/site';
+
+const allPosts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+function calculateReadingTime(content: string): number {
+	const wordsPerMinute = 200;
+	const words = content.split(/\s+/).length;
+	return Math.ceil(words / wordsPerMinute);
+}
+
+// Get all unique tags
+const allTags = Array.from(
+	new Set(allPosts.flatMap(post => post.data.tags || []))
+).sort();
+
+// Prepare posts data for client-side
+const postsData = allPosts.map(post => ({
+	slug: post.slug,
+	title: post.data.title,
+	description: post.data.description,
+	heroImage: post.data.heroImage || '',
+	pubDate: post.data.pubDate.toISOString(),
+	formattedDate: post.data.pubDate.toLocaleDateString('en-us', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+	}),
+	readingTime: calculateReadingTime(post.body),
+	tags: post.data.tags || [],
+}));
+---
+
+<Layout title="Latest Articles" description="Read my latest thoughts and articles on web development, AI, design, and technology.">
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Blog",
+		"name": "Blog",
+		"description": "Thoughts on web development, AI, design, and technology.",
+		"url": `${SITE_URL}/blog`,
+		"inLanguage": "en-US",
+		"blogPost": postsData.slice(0, 10).map(post => ({
+			"@type": "BlogPosting",
+			"headline": post.title,
+			"description": post.description,
+			"url": `${SITE_URL}/blog/${post.slug}/`,
+			"datePublished": post.pubDate
+		}))
+	})} />
+	
+	<main class="space-y-12 pt-0">
+		<!-- Header Section -->
+		<header class="space-y-6 pb-8 border-b border-zinc-800">
+			<div class="space-y-3">
+				<h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Blog</h1>
+				<p class="text-base text-zinc-400">Thoughts on web development, AI, design, and technology.</p>
+			</div>
+			
+			<!-- Search Input -->
+			<div class="relative w-full">
+				<label for="search-input" class="sr-only">Search blog posts</label>
+				<input
+					type="text"
+					id="search-input"
+					placeholder="Search posts..."
+					aria-label="Search blog posts"
+					aria-describedby="search-results-status"
+					class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-50 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:border-transparent transition-all text-sm"
+				/>
+				<svg class="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+				</svg>
+			</div>
+			<div id="search-results-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+			
+			<!-- Tags Filter -->
+			<div class="relative">
+				<div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" id="tags-container" role="tablist" aria-label="Filter posts by tag">
+					<button
+						data-tag="all"
+						role="tab"
+						aria-selected="true"
+						aria-controls="posts-container"
+						class="tag-filter active inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 cursor-pointer min-h-9 bg-zinc-800 text-zinc-50 border-zinc-700 hover:bg-zinc-700"
+					>
+						All
+					</button>
+					{allTags.map(tag => (
+						<button
+							data-tag={tag}
+							role="tab"
+							aria-selected="false"
+							aria-controls="posts-container"
+							aria-label={`Filter by ${tag} tag`}
+							class="tag-filter inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 cursor-pointer min-h-9 bg-zinc-950 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-50 hover:border-zinc-700"
+						>
+							#{tag}
+						</button>
+					))}
+				</div>
+				<!-- Gradient overlays -->
+				<div id="gradient-left" class="absolute left-0 top-0 bottom-2 w-8 bg-linear-to-r from-zinc-950 to-transparent pointer-events-none opacity-0 transition-opacity duration-200"></div>
+				<div id="gradient-right" class="absolute right-0 top-0 bottom-2 w-8 bg-linear-to-l from-zinc-950 to-transparent pointer-events-none transition-opacity duration-200"></div>
+			</div>
+		</header>
+		
+		<!-- Posts Container -->
+		<div id="posts-container" class="grid gap-12">
+			<!-- Posts will be rendered here by JavaScript -->
+		</div>
+		
+		<!-- Load More Button -->
+		<div class="flex justify-center pt-8" id="load-more-container">
+			<button
+				id="load-more-btn"
+				class="px-6 py-3 rounded-full bg-zinc-800 text-zinc-50 text-sm font-medium transition-all hover:bg-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 min-h-11 hidden"
+				aria-label="Load more blog posts"
+			>
+				Load More
+			</button>
+		</div>
+		
+		<!-- No Results Message -->
+		<div id="no-results" class="text-center py-16 text-zinc-500 hidden">
+			<p class="text-base">No posts found. Try adjusting your search or filter.</p>
+		</div>
+	</main>
+	
+	<script define:vars={{ postsData }}>
+		const POSTS_PER_PAGE = 10;
+		let currentPage = 1;
+		let filteredPosts = [...postsData];
+		let activeTag = 'all';
+		let searchQuery = '';
+		
+		const postsContainer = document.getElementById('posts-container');
+		const loadMoreBtn = document.getElementById('load-more-btn');
+		const loadMoreContainer = document.getElementById('load-more-container');
+		const noResults = document.getElementById('no-results');
+		const searchInput = document.getElementById('search-input');
+		const searchResultsStatus = document.getElementById('search-results-status');
+		const tagFilters = document.querySelectorAll('.tag-filter');
+		const tagsContainer = document.getElementById('tags-container');
+		const gradientLeft = document.getElementById('gradient-left');
+		const gradientRight = document.getElementById('gradient-right');
+		
+		// Function to update gradient visibility based on scroll position
+		function updateGradients() {
+			if (!tagsContainer || !gradientLeft || !gradientRight) return;
+			
+			const { scrollLeft, scrollWidth, clientWidth } = tagsContainer;
+			const isAtStart = scrollLeft <= 1;
+			const isAtEnd = scrollLeft + clientWidth >= scrollWidth - 1;
+			
+			gradientLeft.style.opacity = isAtStart ? '0' : '1';
+			gradientRight.style.opacity = isAtEnd ? '0' : '1';
+		}
+		
+		// Update gradients on scroll and resize
+		if (tagsContainer) {
+			tagsContainer.addEventListener('scroll', updateGradients);
+			window.addEventListener('resize', updateGradients);
+			// Initial check
+			updateGradients();
+		}
+		
+		function calculateReadingTime(content) {
+			const wordsPerMinute = 200;
+			const words = content.split(/\s+/).length;
+			return Math.ceil(words / wordsPerMinute);
+		}
+		
+		function renderPost(post) {
+			return `
+				<article class="group relative flex flex-col sm:flex-row gap-6 pb-8 border-b border-zinc-800 last:border-0 last:pb-0 sm:items-start">
+					${post.heroImage ? `
+						<a href="/blog/${post.slug}/" class="relative aspect-square w-full sm:w-40 shrink-0 overflow-hidden rounded-xl bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950">
+							<img
+								src="${post.heroImage}"
+								alt="${post.title} - Featured image"
+								class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+								loading="lazy"
+								decoding="async"
+								width="160"
+								height="160"
+								sizes="(max-width: 640px) 100vw, 160px"
+							/>
+						</a>
+					` : ''}
+					<div class="flex flex-col flex-1 min-w-0">
+						<div class="flex items-center gap-2 text-sm text-zinc-400 mb-3 flex-wrap">
+							<time datetime="${post.pubDate}">${post.formattedDate}</time>
+							<span aria-hidden="true" class="text-zinc-600">•</span>
+							<span>${post.readingTime} min read</span>
+						</div>
+						<h3 class="text-xl font-bold group-hover:text-zinc-50 transition-colors mb-3 leading-tight line-clamp-1">
+							<a href="/blog/${post.slug}/" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
+								${post.title}
+							</a>
+						</h3>
+						<p class="text-base text-zinc-400 line-clamp-2 leading-relaxed">
+							${post.description}
+						</p>
+						${post.tags.length > 0 ? `
+							<div class="mt-3 flex gap-2 flex-wrap">
+								${post.tags.map(tag => `
+									<button
+										data-filter-tag="${tag}"
+										class="inline-flex items-center rounded-full border border-zinc-800 bg-zinc-950 px-3 py-1 text-xs font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-50 hover:border-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+									>
+										#${tag}
+									</button>
+								`).join('')}
+							</div>
+						` : ''}
+					</div>
+				</article>
+			`;
+		}
+		
+		function filterPosts() {
+			filteredPosts = postsData.filter(post => {
+				// Tag filter
+				const matchesTag = activeTag === 'all' || post.tags.includes(activeTag);
+				
+				// Search filter
+				const matchesSearch = !searchQuery || 
+					post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+					post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+					post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+				
+				return matchesTag && matchesSearch;
+			});
+			
+			currentPage = 1;
+			renderPosts();
+		}
+		
+		function renderPosts() {
+			const postsToShow = filteredPosts.slice(0, currentPage * POSTS_PER_PAGE);
+			
+			if (postsToShow.length === 0) {
+				postsContainer.innerHTML = '';
+				noResults.classList.remove('hidden');
+				loadMoreContainer.classList.add('hidden');
+				if (searchResultsStatus) {
+					searchResultsStatus.textContent = 'No posts found. Try adjusting your search or filter.';
+				}
+				return;
+			}
+			
+			noResults.classList.add('hidden');
+			postsContainer.innerHTML = postsToShow.map(renderPost).join('');
+			
+			// Update live region
+			if (searchResultsStatus) {
+				const totalCount = filteredPosts.length;
+				const showingCount = postsToShow.length;
+				if (totalCount === showingCount) {
+					searchResultsStatus.textContent = `Showing ${totalCount} post${totalCount === 1 ? '' : 's'}.`;
+				} else {
+					searchResultsStatus.textContent = `Showing ${showingCount} of ${totalCount} post${totalCount === 1 ? '' : 's'}.`;
+				}
+			}
+			
+			// Show/hide load more button
+			if (filteredPosts.length > postsToShow.length) {
+				loadMoreBtn.classList.remove('hidden');
+			} else {
+				loadMoreBtn.classList.add('hidden');
+			}
+			
+			// Add click handlers to tag buttons in posts
+			postsContainer.querySelectorAll('[data-filter-tag]').forEach(btn => {
+				btn.addEventListener('click', (e) => {
+					e.preventDefault();
+					const tag = btn.getAttribute('data-filter-tag');
+					activeTag = tag;
+					updateTagFilters();
+					filterPosts();
+				});
+			});
+		}
+		
+		function updateTagFilters() {
+			tagFilters.forEach(btn => {
+				const tag = btn.getAttribute('data-tag');
+				const isActive = tag === activeTag;
+				if (isActive) {
+					btn.classList.add('active', 'bg-zinc-800', 'text-zinc-50', 'border-zinc-700');
+					btn.classList.remove('bg-zinc-950', 'text-zinc-400', 'border-zinc-800');
+					btn.setAttribute('aria-selected', 'true');
+				} else {
+					btn.classList.remove('active', 'bg-zinc-800', 'text-zinc-50', 'border-zinc-700');
+					btn.classList.add('bg-zinc-950', 'text-zinc-400', 'border-zinc-800');
+					btn.setAttribute('aria-selected', 'false');
+				}
+				btn.classList.add('cursor-pointer');
+			});
+		}
+		
+		// Search input handler
+		searchInput.addEventListener('input', (e) => {
+			searchQuery = e.target.value;
+			filterPosts();
+		});
+		
+		// Tag filter handlers
+		tagFilters.forEach(btn => {
+			btn.addEventListener('click', () => {
+				activeTag = btn.getAttribute('data-tag');
+				updateTagFilters();
+				filterPosts();
+			});
+		});
+		
+		// Load more handler
+		loadMoreBtn.addEventListener('click', () => {
+			currentPage++;
+			renderPosts();
+		});
+		
+		// Initial render
+		renderPosts();
+	</script>
+	
+	<style>
+		.scrollbar-hide {
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+		}
+		.scrollbar-hide::-webkit-scrollbar {
+			display: none;
+		}
+	</style>
+</Layout>
