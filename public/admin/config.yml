@@ -1,0 +1,58 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/images/blog
+public_folder: /images/blog
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "yaml-frontmatter"
+    frontmatter_delimiter: "---"
+    fields:
+      - { 
+          label: "Title", 
+          name: "title", 
+          widget: "string",
+          required: true
+        }
+      - { 
+          label: "Description", 
+          name: "description", 
+          widget: "text",
+          required: false
+        }
+      - { 
+          label: "Publish Date", 
+          name: "pubDate", 
+          widget: "datetime", 
+          format: "YYYY-MM-DD", 
+          date_format: "YYYY-MM-DD", 
+          time_format: false,
+          default: ""
+        }
+      - { 
+          label: "Hero Image", 
+          name: "heroImage", 
+          widget: "image", 
+          required: false
+        }
+      - { 
+          label: "Tags", 
+          name: "tags", 
+          widget: "list", 
+          default: [], 
+          field: { label: "Tag", name: "tag", widget: "string" },
+          allow_add: true
+        }
+      - {
+          label: "Body",
+          name: "body",
+          widget: "markdown",
+          required: true
+        }
