@@ -1,0 +1,151 @@
+---
+import { GTM_ID } from '../consts/site';
+
+const showBanner = GTM_ID;
+---
+
+{showBanner && (
+	<div
+		id="consent-banner"
+		role="dialog"
+		aria-labelledby="consent-banner-title"
+		aria-describedby="consent-banner-description"
+		class="fixed bottom-0 left-0 right-0 z-50 bg-zinc-900 border-t border-zinc-800 px-6 py-4 hidden"
+	>
+		<div class="container-compact max-w-2xl mx-auto">
+			<div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+				<div class="flex-1">
+					<h2 id="consent-banner-title" class="text-sm font-semibold text-zinc-50 mb-1">
+						Privacy & Cookies
+					</h2>
+					<p id="consent-banner-description" class="text-sm text-zinc-400">
+						We use cookies and analytics to improve your experience. By continuing, you agree to our use of cookies.
+					</p>
+				</div>
+				<div class="flex gap-3 flex-shrink-0">
+					<button
+						id="consent-accept"
+						class="px-4 py-2 rounded-full bg-zinc-50 text-zinc-900 text-sm font-medium transition-all hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 min-h-10"
+						aria-label="Accept cookies and analytics"
+					>
+						Accept
+					</button>
+					<button
+						id="consent-decline"
+						class="px-4 py-2 rounded-full border border-zinc-800 bg-zinc-950 text-zinc-400 text-sm font-medium transition-all hover:bg-zinc-800 hover:text-zinc-50 hover:border-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 min-h-10"
+						aria-label="Decline cookies and analytics"
+					>
+						Decline
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+)}
+
+<script define:vars={{ gtmId: GTM_ID }}>
+	const CONSENT_KEY = 'cookie-consent';
+	const CONSENT_ACCEPTED = 'accepted';
+	const CONSENT_DECLINED = 'declined';
+	
+	const banner = document.getElementById('consent-banner');
+	const acceptBtn = document.getElementById('consent-accept');
+	const declineBtn = document.getElementById('consent-decline');
+	
+	if (!banner || !acceptBtn || !declineBtn) {
+		// Banner not present, exit silently
+		return;
+	}
+	
+	// Check if consent was already given
+	const consent = localStorage.getItem(CONSENT_KEY);
+	
+	if (consent === CONSENT_ACCEPTED) {
+		// User already accepted, load GTM
+		loadGTM();
+	} else if (consent === CONSENT_DECLINED) {
+		// User declined, don't show banner
+		// Do nothing
+	} else {
+		// No consent yet, show banner
+		banner.classList.remove('hidden');
+		banner.classList.add('block');
+	}
+	
+	function loadGTM() {
+		if (!gtmId) return;
+		
+		// Initialize dataLayer if it doesn't exist
+		window.dataLayer = window.dataLayer || [];
+		
+		// Load GTM script
+		const script = document.createElement('script');
+		script.async = true;
+		script.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+		script.onload = () => {
+			window.dataLayer.push({
+				'gtm.start': new Date().getTime(),
+				event: 'gtm.js'
+			});
+		};
+		document.head.appendChild(script);
+		
+		// Add noscript iframe to body if not already present
+		if (!document.querySelector('noscript iframe[src*="googletagmanager.com"]')) {
+			const noscript = document.createElement('noscript');
+			const iframe = document.createElement('iframe');
+			iframe.src = `https://www.googletagmanager.com/ns.html?id=${gtmId}`;
+			iframe.height = '0';
+			iframe.width = '0';
+			iframe.style.display = 'none';
+			iframe.style.visibility = 'hidden';
+			iframe.setAttribute('aria-hidden', 'true');
+			noscript.appendChild(iframe);
+			document.body.insertBefore(noscript, document.body.firstChild);
+		}
+	}
+	
+	function hideBanner() {
+		banner.classList.add('hidden');
+		banner.classList.remove('block');
+	}
+	
+	function acceptConsent() {
+		localStorage.setItem(CONSENT_KEY, CONSENT_ACCEPTED);
+		loadGTM();
+		hideBanner();
+	}
+	
+	function declineConsent() {
+		localStorage.setItem(CONSENT_KEY, CONSENT_DECLINED);
+		hideBanner();
+	}
+	
+	acceptBtn.addEventListener('click', acceptConsent);
+	declineBtn.addEventListener('click', declineConsent);
+	
+	// Keyboard support
+	banner.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') {
+			declineConsent();
+		}
+	});
+</script>
+
+<style>
+	#consent-banner {
+		animation: slideUp 0.3s ease-out;
+	}
+	
+	@keyframes slideUp {
+		from {
+			transform: translateY(100%);
+			opacity: 0;
+		}
+		to {
+			transform: translateY(0);
+			opacity: 1;
+		}
+	}
+</style>
+
