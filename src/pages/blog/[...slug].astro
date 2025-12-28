@@ -53,34 +53,6 @@ const breadcrumbs = [
 	})} />
 	
 	<article class="space-y-10 pt-0" itemscope itemtype="https://schema.org/BlogPosting">
-		<!-- Breadcrumb Navigation -->
-		<nav aria-label="Breadcrumb" class="mb-6">
-			<ol class="flex items-center gap-2 text-sm text-zinc-500 flex-wrap" itemscope itemtype="https://schema.org/BreadcrumbList">
-				{breadcrumbs.map((crumb, index) => {
-					const isLast = index === breadcrumbs.length - 1;
-					return (
-						<li class="flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-							{!isLast ? (
-								<>
-									<a 
-										href={crumb.url} 
-										class="hover:text-zinc-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded"
-										itemprop="item"
-									>
-										<span itemprop="name">{crumb.name}</span>
-									</a>
-									<meta itemprop="position" content={String(index + 1)} />
-									<span aria-hidden="true" class="mx-2 text-zinc-600">/</span>
-								</>
-							) : (
-								<span class="text-zinc-400" itemprop="name">{crumb.name}</span>
-							)}
-						</li>
-					);
-				})}
-			</ol>
-		</nav>
-		
 		<header class="space-y-6 pb-8 border-b border-zinc-800">
 			<div class="flex items-center gap-2 text-sm text-zinc-400 flex-wrap">
 				<time datetime={post.data.pubDate.toISOString()} itemprop="datePublished" content={post.data.pubDate.toISOString()}>
