@@ -1,0 +1,4 @@
+{
+  "installScript": "pnpm i",
+  "devScript": "pnpm dev"
+}
