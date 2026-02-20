@@ -1,4 +1,4 @@
-# Astro Starter Kit: Basics
+# Astro Starter Kit: Basic
 
 ```sh
 pnpm create astro@latest -- --template basics
