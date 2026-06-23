@@ -8,7 +8,7 @@ tags: ['general']
 
 I learn things faster when I have to explain them. That's most of why this blog exists.
 
-I'm a software engineer who spends a lot of time understanding how things work — new tools, new ideas, and especially how businesses actually run. Writing is how I turn all that poking around into something I understand well enough to use. If it helps you too, even better.
+I'm a software engineer who spends a lot of time understanding how things work: new tools, new ideas, and especially how businesses actually run. Writing is how I turn all that poking around into something I understand well enough to use. If it helps you too, even better.
 
 ## What you'll find here
 
@@ -18,8 +18,8 @@ The thread running through all of it is **practical over hype.** There's no shor
 
 ## What I'm aiming for
 
-I want you to leave a post knowing something you didn't, explained clearly enough to act on. Not a link dump, not a hot take — something thought through, broken down well, honest about where it breaks.
+I want you to leave a post knowing something you didn't, explained clearly enough to act on. Not a link dump, not a hot take. Something thought through, broken down well, honest about where it breaks.
 
-That's the whole goal. If a post doesn't clear that bar, it's not worth your time or mine.
+If a post doesn't clear that bar, it isn't worth your time or mine.
 
 So: welcome. Pull up a chair, and let's figure some things out together.
