@@ -27,7 +27,7 @@ function calculateReadingTime(content: string): number {
 		"jobTitle": "Software Developer",
 		"description": "Software developer focused on building minimalist and efficient web applications, exploring AI technologies."
 	})} />
-	
+
 	<script type="application/ld+json" set:html={JSON.stringify({
 		"@context": "https://schema.org",
 		"@type": "WebSite",
@@ -39,14 +39,18 @@ function calculateReadingTime(content: string): number {
 		},
 		"inLanguage": "en-US"
 	})} />
-	
+
 	<section class="space-y-6 pt-0">
 		<h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
 			Hi, I'm Opik.
 		</h1>
 		<p class="text-lg text-zinc-400 leading-relaxed max-w-2xl">
-			I'm a software engineer focused on modern web development and AI integration. 
-			I believe AI is leverage and will change how we build web applications and how businesses make decisions.
+			I'm an engineer who thinks like an analyst. I figure out what's actually worth
+			solving in a business, then build it end to end.
+		</p>
+		<p class="text-lg text-zinc-400 leading-relaxed max-w-2xl">
+			Lately that means AI. It's already changed how I work, and most businesses are
+			barely scratching what it can do for them. I help them find out.
 		</p>
 		<div class="flex gap-4 flex-wrap">
 			<a
@@ -71,7 +75,7 @@ function calculateReadingTime(content: string): number {
 				View all posts <span aria-hidden="true">&rarr;</span>
 			</a>
 		</div>
-		
+
 		<div class="grid gap-10">
 			{posts.map((post) => {
 				const readingTime = calculateReadingTime(post.body);
