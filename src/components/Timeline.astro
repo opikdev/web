@@ -1,0 +1,72 @@
+---
+// A vertical timeline. Renders as a static ordered list (crawlable); JS reveals
+// items on scroll. Reads fine with no JS.
+//
+// Usage (.mdx):
+//   import Timeline from '../../components/Timeline.astro';
+//   <Timeline events={[
+//     { date: 'Jun 9', text: 'Anthropic launches Fable 5 and Mythos 5.' },
+//     { date: 'Jun 12', text: 'US export directive. Both pulled worldwide.', highlight: true },
+//   ]} />
+
+interface Event {
+	date: string;
+	text: string;
+	highlight?: boolean;
+}
+
+interface Props {
+	events: Event[];
+	title?: string;
+}
+
+const { events, title } = Astro.props;
+---
+
+<div class="my-8 not-prose" data-timeline>
+	{title && <p class="text-sm font-medium text-zinc-300 mb-4 tracking-tight">{title}</p>}
+	<ol class="relative border-l border-zinc-800 ml-2">
+		{events.map((e) => (
+			<li
+				class="tl-item relative pl-6 pb-6 last:pb-0 opacity-0 translate-y-1 transition-all duration-500 ease-out"
+			>
+				<span
+					class={`absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-zinc-950 ${
+						e.highlight ? 'bg-zinc-100' : 'bg-zinc-600'
+					}`}
+					aria-hidden="true"
+				></span>
+				<div class={`text-xs font-medium tabular-nums mb-1 ${e.highlight ? 'text-zinc-200' : 'text-zinc-500'}`}>{e.date}</div>
+				<div class="text-sm text-zinc-400 leading-relaxed">{e.text}</div>
+			</li>
+		))}
+	</ol>
+</div>
+
+<script>
+	function initTimelines() {
+		document.querySelectorAll('[data-timeline]').forEach((tl) => {
+			const items = Array.from(tl.querySelectorAll<HTMLElement>('.tl-item'));
+			const reveal = () => items.forEach((it, i) => {
+				setTimeout(() => {
+					it.style.opacity = '1';
+					it.style.transform = 'translateY(0)';
+				}, i * 110);
+			});
+
+			if (!('IntersectionObserver' in window)) {
+				items.forEach((it) => { it.style.opacity = '1'; it.style.transform = 'none'; });
+				return;
+			}
+			const io = new IntersectionObserver((entries, obs) => {
+				entries.forEach((e) => {
+					if (e.isIntersecting) { reveal(); obs.unobserve(e.target); }
+				});
+			}, { threshold: 0.2 });
+			io.observe(tl);
+		});
+	}
+
+	initTimelines();
+	document.addEventListener('astro:after-swap', initTimelines);
+</script>

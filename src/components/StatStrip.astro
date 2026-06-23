@@ -1,0 +1,116 @@
+---
+// A row of stats that count up when scrolled into view.
+// Numbers render as real HTML (crawlable, SEO-safe); JS only animates them.
+//
+// Usage (.mdx):
+//   import StatStrip from '../../components/StatStrip.astro';
+//   <StatStrip stats={[
+//     { value: 750000, display: '750K', label: 'lines of Rust' },
+//     { value: 99.8, display: '99.8%', label: 'tests passing' },
+//     { value: 11, display: '11', label: 'days to merge' },
+//   ]} />
+
+interface Stat {
+	/** Numeric target used to animate the count-up. */
+	value: number;
+	/** Final text shown (e.g. "750K", "99.8%", "$1.3M"). Defaults to value. */
+	display?: string;
+	/** Optional prefix kept static during the count (e.g. "$"). */
+	prefix?: string;
+	/** Optional suffix kept static during the count (e.g. "%", "×", "M"). */
+	suffix?: string;
+	label: string;
+}
+
+interface Props {
+	stats: Stat[];
+}
+
+const { stats } = Astro.props;
+const cols = stats.length;
+---
+
+<div
+	class={`my-8 not-prose grid gap-px rounded-xl overflow-hidden bg-zinc-800/60 border border-zinc-800 ${
+		cols === 2 ? 'grid-cols-2' : cols === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-1 sm:grid-cols-3'
+	}`}
+	data-statstrip
+>
+	{stats.map((s) => (
+		<div class="bg-zinc-950 px-5 py-6 text-center">
+			<div
+				class="text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-50 tabular-nums"
+				data-stat
+				data-value={s.value}
+				data-display={s.display ?? String(s.value)}
+				data-prefix={s.prefix ?? ''}
+				data-suffix={s.suffix ?? ''}
+			>
+				{(s.prefix ?? '') + (s.display ?? String(s.value)) + (s.suffix ?? '')}
+			</div>
+			<div class="mt-1.5 text-xs text-zinc-500 leading-snug">{s.label}</div>
+		</div>
+	))}
+</div>
+
+<script>
+	function initStatStrips() {
+		const strips = document.querySelectorAll('[data-statstrip]');
+		if (!strips.length) return;
+
+		const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+		const run = (strip: Element) => {
+			strip.querySelectorAll<HTMLElement>('[data-stat]').forEach((el) => {
+				const target = parseFloat(el.dataset.value || '0');
+				const finalText = el.dataset.display || '';
+				const prefix = el.dataset.prefix || '';
+				const suffix = el.dataset.suffix || '';
+				// How many decimals the final number shows, so the count matches.
+				const decimals = (String(target).split('.')[1] || '').length;
+				const duration = 1100;
+				let start: number | null = null;
+
+				const tick = (ts: number) => {
+					if (start === null) start = ts;
+					const p = Math.min(1, (ts - start) / duration);
+					const eased = easeOut(p);
+					if (p < 1) {
+						const current = (target * eased).toFixed(decimals);
+						// Abbreviate large in-flight numbers to keep width sane.
+						const n = parseFloat(current);
+						let mid: string;
+						if (target >= 1_000_000) mid = (n / 1_000_000).toFixed(1) + 'M';
+						else if (target >= 10_000) mid = Math.round(n / 1000) + 'K';
+						else mid = current;
+						el.textContent = prefix + mid + suffix;
+						requestAnimationFrame(tick);
+					} else {
+						el.textContent = prefix + finalText + suffix; // snap to exact final
+					}
+				};
+				requestAnimationFrame(tick);
+			});
+		};
+
+		if (!('IntersectionObserver' in window)) {
+			strips.forEach(run);
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries, obs) => {
+				entries.forEach((e) => {
+					if (e.isIntersecting) {
+						run(e.target);
+						obs.unobserve(e.target);
+					}
+				});
+			},
+			{ threshold: 0.5 }
+		);
+		strips.forEach((s) => io.observe(s));
+	}
+
+	initStatStrips();
+	document.addEventListener('astro:after-swap', initStatStrips);
+</script>
