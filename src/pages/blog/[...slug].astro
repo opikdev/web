@@ -54,7 +54,7 @@ const breadcrumbs = [
 	
 	<article class="space-y-10 pt-0" itemscope itemtype="https://schema.org/BlogPosting">
 		<header class="space-y-6 pb-8 border-b border-zinc-800">
-			<div class="flex items-center gap-2 text-sm text-zinc-400 flex-wrap">
+			<div class="flex items-center gap-2 text-sm text-zinc-500 flex-wrap">
 				<time datetime={post.data.pubDate.toISOString()} itemprop="datePublished" content={post.data.pubDate.toISOString()}>
 					{post.data.pubDate.toLocaleDateString('en-us', {
 						year: 'numeric',
@@ -75,7 +75,7 @@ const breadcrumbs = [
 					</>
 				)}
 			</div>
-			<h1 class="text-4xl font-bold tracking-tight sm:text-5xl leading-tight" itemprop="headline">
+			<h1 class="text-[1.75rem] font-medium tracking-tight sm:text-[2.125rem] leading-[1.2]" itemprop="headline">
 				{post.data.title}
 			</h1>
 			{post.data.heroImage && (

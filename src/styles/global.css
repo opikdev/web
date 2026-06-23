@@ -28,6 +28,15 @@
 
   body {
     @apply bg-[var(--background)] text-[var(--foreground)] font-sans antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.014em;
+  }
+
+  /* Tighten optical tracking on larger headings, like the reference */
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
   }
 
   /* Font loading optimization */
@@ -56,7 +65,7 @@
 
   /* Markdown/Prose Styles */
   .markdown {
-    @apply text-zinc-400 leading-relaxed;
+    @apply text-zinc-400 text-[0.9375rem] leading-[1.75];
   }
 
   .markdown > * + * {
@@ -64,23 +73,23 @@
   }
 
   .markdown h1 {
-    @apply text-4xl font-bold text-zinc-50 tracking-tight mt-10 mb-6 leading-tight;
+    @apply text-2xl font-medium text-zinc-50 mt-12 mb-4 leading-snug;
   }
 
   .markdown h2 {
-    @apply text-3xl font-bold text-zinc-50 tracking-tight mt-10 mb-4 leading-tight;
+    @apply text-xl font-medium text-zinc-50 mt-12 mb-3 leading-snug;
   }
 
   .markdown h3 {
-    @apply text-2xl font-semibold text-zinc-50 tracking-tight mt-8 mb-3 leading-snug;
+    @apply text-base font-semibold text-zinc-100 mt-8 mb-2 leading-snug;
   }
 
   .markdown h4 {
-    @apply text-xl font-semibold text-zinc-50 tracking-tight mt-6 mb-3 leading-snug;
+    @apply text-sm font-semibold text-zinc-200 mt-6 mb-2 leading-snug;
   }
 
   .markdown p {
-    @apply text-base leading-relaxed mb-4;
+    @apply leading-[1.75] mb-4;
   }
 
   .markdown p:last-child {
@@ -88,7 +97,7 @@
   }
 
   .markdown a {
-    @apply text-zinc-300 underline underline-offset-2 decoration-zinc-700 hover:text-zinc-50 hover:decoration-zinc-500 transition-colors;
+    @apply text-zinc-100 underline underline-offset-[3px] decoration-zinc-600 hover:text-zinc-50 hover:decoration-zinc-400 transition-colors;
   }
 
   .markdown strong {
@@ -101,7 +110,7 @@
 
   .markdown ul,
   .markdown ol {
-    @apply my-6 space-y-2;
+    @apply my-7 space-y-3;
   }
 
   .markdown ul {

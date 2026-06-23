@@ -56,8 +56,8 @@ const postsData = allPosts.map(post => ({
 		<!-- Header Section -->
 		<header class="space-y-6 pb-8 border-b border-zinc-800">
 			<div class="space-y-3">
-				<h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Blog</h1>
-				<p class="text-base text-zinc-400">Thoughts on web development, AI, design, and technology.</p>
+				<h1 class="text-2xl font-medium tracking-tight sm:text-3xl">Blog</h1>
+				<p class="text-sm text-zinc-500 leading-relaxed">Thoughts on web development, AI, design, and technology.</p>
 			</div>
 			
 			<!-- Search Input -->
@@ -69,7 +69,7 @@ const postsData = allPosts.map(post => ({
 					placeholder="Search posts..."
 					aria-label="Search blog posts"
 					aria-describedby="search-results-status"
-					class="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-50 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:border-transparent transition-all text-sm"
+					class="w-full px-4 py-3 bg-zinc-900/60 border border-zinc-800 rounded-xl text-zinc-50 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:border-transparent transition-all text-sm"
 				/>
 				<svg class="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -85,7 +85,7 @@ const postsData = allPosts.map(post => ({
 						role="tab"
 						aria-selected="true"
 						aria-controls="posts-container"
-						class="tag-filter active inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 cursor-pointer min-h-9 bg-zinc-800 text-zinc-50 border-zinc-700 hover:bg-zinc-700"
+						class="tag-filter active inline-flex items-center rounded-lg border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 cursor-pointer min-h-9 bg-zinc-800 text-zinc-50 border-zinc-700 hover:bg-zinc-700"
 					>
 						All
 					</button>
@@ -96,7 +96,7 @@ const postsData = allPosts.map(post => ({
 							aria-selected="false"
 							aria-controls="posts-container"
 							aria-label={`Filter by ${tag} tag`}
-							class="tag-filter inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 cursor-pointer min-h-9 bg-zinc-950 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-50 hover:border-zinc-700"
+							class="tag-filter inline-flex items-center rounded-lg border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 cursor-pointer min-h-9 bg-zinc-950 text-zinc-400 border-zinc-800 hover:bg-zinc-800 hover:text-zinc-50 hover:border-zinc-700"
 						>
 							#{tag}
 						</button>
@@ -117,7 +117,7 @@ const postsData = allPosts.map(post => ({
 		<div class="flex justify-center pt-8" id="load-more-container">
 			<button
 				id="load-more-btn"
-				class="px-6 py-3 rounded-full bg-zinc-800 text-zinc-50 text-sm font-medium transition-all hover:bg-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 min-h-11 hidden"
+				class="px-5 py-3 rounded-xl border border-zinc-800 bg-transparent text-zinc-300 text-[13px] font-medium transition-colors hover:bg-zinc-900 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 min-h-11 hidden"
 				aria-label="Load more blog posts"
 			>
 				Load More
@@ -193,17 +193,17 @@ const postsData = allPosts.map(post => ({
 					` : ''}
 					<div class="flex flex-col flex-1 min-w-0 justify-between">
 						<div>
-							<div class="flex items-center gap-2 text-sm text-zinc-400 mb-3 flex-wrap">
+							<div class="flex items-center gap-2 text-[13px] text-zinc-500 mb-2.5 flex-wrap">
 								<time datetime="${post.pubDate}">${post.formattedDate}</time>
-								<span aria-hidden="true" class="text-zinc-600">•</span>
+								<span aria-hidden="true" class="text-zinc-700">•</span>
 								<span>${post.readingTime} min read</span>
 							</div>
-							<h3 class="text-xl font-bold group-hover:text-zinc-50 transition-colors mb-3 leading-tight line-clamp-2">
+							<h3 class="text-[15px] font-medium text-zinc-100 group-hover:text-zinc-50 transition-colors mb-1.5 leading-snug tracking-tight line-clamp-2">
 								<a href="/blog/${post.slug}/" class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
 									${post.title}
 								</a>
 							</h3>
-							<p class="text-base text-zinc-400 line-clamp-1 leading-relaxed">
+							<p class="text-sm text-zinc-500 line-clamp-1 leading-relaxed">
 								${post.description}
 							</p>
 						</div>
@@ -212,7 +212,7 @@ const postsData = allPosts.map(post => ({
 								${post.tags.map(tag => `
 									<button
 										data-filter-tag="${tag}"
-										class="inline-flex items-center rounded-full border border-zinc-800 bg-zinc-950 px-3 py-1 text-xs font-medium text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-50 hover:border-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+										class="inline-flex items-center rounded-lg border border-zinc-800/80 bg-transparent px-2.5 py-1 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-900 hover:text-zinc-200 hover:border-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
 									>
 										#${tag}
 									</button>
