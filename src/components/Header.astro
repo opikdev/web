@@ -39,17 +39,19 @@ const currentPath = Astro.url.pathname;
     </div>
 
     <div class="flex-1 flex items-center justify-end gap-1.5">
-      <a
-        href={SITE_AUTHOR_X_URL}
-        target="_blank"
-        rel="noopener noreferrer me"
-        class="p-1.5 hover:bg-zinc-800 rounded-full transition-colors text-zinc-400 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
-        aria-label="Follow on X (formerly Twitter)"
-      >
-        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-      </a>
+      {SITE_AUTHOR_X_URL && (
+        <a
+          href={SITE_AUTHOR_X_URL}
+          target="_blank"
+          rel="noopener noreferrer me"
+          class="p-1.5 hover:bg-zinc-800 rounded-full transition-colors text-zinc-400 hover:text-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
+          aria-label="Follow on X (formerly Twitter)"
+        >
+          <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+      )}
       <a
         href={SITE_AUTHOR_LINKEDIN_URL}
         target="_blank"

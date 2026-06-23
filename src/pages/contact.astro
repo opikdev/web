@@ -32,9 +32,11 @@ import { SITE_AUTHOR_EMAIL, SITE_AUTHOR_X_URL, SITE_AUTHOR_LINKEDIN_URL, SITE_UR
 			<div class="space-y-2">
 				<h2 class="text-sm font-semibold uppercase tracking-wider text-zinc-500">Socials</h2>
 				<div class="flex gap-4 flex-wrap">
-					<a href={SITE_AUTHOR_X_URL} target="_blank" rel="noopener noreferrer me" class="text-base font-medium text-zinc-300 hover:text-zinc-50 transition-colors underline decoration-zinc-700 underline-offset-4 hover:decoration-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
-						X (Twitter)
-					</a>
+					{SITE_AUTHOR_X_URL && (
+						<a href={SITE_AUTHOR_X_URL} target="_blank" rel="noopener noreferrer me" class="text-base font-medium text-zinc-300 hover:text-zinc-50 transition-colors underline decoration-zinc-700 underline-offset-4 hover:decoration-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
+							X (Twitter)
+						</a>
+					)}
 					<a href={SITE_AUTHOR_LINKEDIN_URL} target="_blank" rel="noopener noreferrer me" class="text-base font-medium text-zinc-300 hover:text-zinc-50 transition-colors underline decoration-zinc-700 underline-offset-4 hover:decoration-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 rounded">
 						LinkedIn
 					</a>
