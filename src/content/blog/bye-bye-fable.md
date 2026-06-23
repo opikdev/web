@@ -8,7 +8,7 @@ tags: ['ai', 'anthropic', 'claude', 'policy']
 
 Claude Fable 5 lived for three days.
 
-Anthropic launched it (alongside Claude Mythos 5) on June 9. On June 12, the company disabled both models for every customer on the planet. Not a slow deprecation, not a migration window — just gone, overnight, on government order.
+Anthropic launched it (alongside Claude Mythos 5) on June 9 — [I wrote a whole welcome post](/blog/welcome-fable/). On June 12, the company disabled both models for every customer on the planet. Not a slow deprecation, not a migration window — just gone, overnight, on government order.
 
 It's a strange thing to watch a frontier model blink out of existence faster than most people got to try it. So let's be precise about what happened, because the details matter more than the headline.
 
