@@ -27,3 +27,5 @@ pnpm-debug.log*
 
 # cursor files
 .cursor/
+# Draft posts held back from the site
+.drafts/

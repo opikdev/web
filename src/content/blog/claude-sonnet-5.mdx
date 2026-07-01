@@ -1,0 +1,46 @@
+---
+title: 'Claude Sonnet 5: The Cheap Way to Run Agents'
+description: 'Anthropic shipped Sonnet 5 as the most agentic Sonnet yet. It doesn''t beat Opus, and that''s not the point. The point is how close it gets for how little.'
+pubDate: '2026-07-01'
+heroImage: '/images/blog/claude-sonnet-5.webp'
+tags: ['ai', 'anthropic', 'claude', 'llm']
+---
+
+import BarChart from '../../components/BarChart.astro';
+
+Anthropic dropped Claude Sonnet 5 yesterday, and the framing tells you everything: it's pitched not as the smartest model, but as the cheap way to run agents. That's a more interesting release than another benchmark crown.
+
+Sonnet 5 is "the most agentic Sonnet yet." It plans, uses tools like browsers and terminals, and runs autonomously at a level that a few months ago needed a bigger, pricier model. It's the new default on Free and Pro, and it's live in the API as `claude-sonnet-5`.
+
+## The numbers
+
+It does not top the charts, and it isn't trying to. On Anthropic's agentic coding benchmark it scores 63.2%, behind Opus 4.8's 69.2% but well ahead of Sonnet 4.6's 58.1%.
+
+<BarChart
+	title="Agentic coding benchmark (higher is better)"
+	unit="%"
+	caption="Source: Anthropic, June 2026. Sonnet 5 is the mid-tier model; Opus 4.8 is the flagship."
+	data={[
+		{ label: 'Claude Opus 4.8', value: 69.2 },
+		{ label: 'Claude Sonnet 5', value: 63.2, highlight: true },
+		{ label: 'Claude Sonnet 4.6', value: 58.1 },
+	]}
+/>
+
+The more telling wins are on the agentic axes. On computer use (OSWorld-Verified) it hits 81.2%, up from Sonnet 4.6's 78.5% and competitive with Opus. On knowledge work (GDPval-AA v2) it scores 1,618, edging out Opus 4.8's 1,615. A mid-tier model quietly matching the flagship on real-work tasks is the story here.
+
+## Why "cheaper agents" is the actual headline
+
+Agents burn tokens. A loop that runs for an hour, calls tools, reads results, and tries again spends way more than a single chat. At that scale, the price per token stops being a footnote and becomes the whole budget.
+
+Sonnet 5 launches at $2 per million input and $10 per million output (introductory, through August 31), rising to $3 and $15 after. Against Opus pricing, that's the difference between "we can run this agent continuously" and "we run it carefully and watch the bill." When a model gets most of the way to flagship agentic performance at a fraction of the cost, it changes what you can afford to leave running.
+
+## The catch the pricing page won't lead with
+
+Two honest caveats before you swap it in everywhere.
+
+The savings are real but smaller than the sticker suggests. Sonnet 5 uses an updated tokenizer that needs roughly 1.0 to 1.35× more tokens than previous models for the same text. Cheaper per token, but you spend more tokens, so measure your actual workload instead of trusting the headline rate.
+
+And it's a mid-tier model on purpose. It's substantially weaker than Opus 4.8 at cybersecurity tasks (and shipped with cyber safeguards on by default), and it still trails Opus on the hardest coding. For frontier-difficulty problems, Opus is still the pick. Sonnet 5 is for the enormous middle: the agentic work that's more about volume and cost than raw ceiling.
+
+That middle is where most real agent work actually lives, which is exactly why this release matters more than its benchmark position suggests. For a while the race was about the smartest model. Increasingly it's about the cheapest model that's still smart enough to leave running unattended, and Sonnet 5 just moved that line down.
