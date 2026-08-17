@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Page not found — Opik"
+  description="This URL doesn't lead anywhere. Head back to the homepage, or email hi@opik.dev if a link sent you here."
+  noindex
+>
+  <section class="flex flex-col gap-2.5 pt-30 pb-35">
+    <p class="font-mono text-sm font-medium tracking-code text-accent-strong">404</p>
+
+    <h1 class="text-lg leading-8 font-medium text-text-1">Page not found</h1>
+
+    <p class="max-w-130 text-base leading-5.5 text-text-2">
+      This URL doesn't lead anywhere. The page may have moved, or the link that sent you here was
+      wrong.
+    </p>
+
+    <div class="flex flex-wrap items-center gap-3 pt-3.5">
+      <a
+        href="/"
+        class="rounded-pill bg-accent px-4 py-2.25 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
+      >
+        Back to home
+      </a>
+      <a
+        href="mailto:hi@opik.dev"
+        class="text-sm text-text-2 transition-colors hover:text-text-1"
+      >
+        hi@opik.dev
+      </a>
+    </div>
+  </section>
+</Layout>

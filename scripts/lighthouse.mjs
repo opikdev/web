@@ -30,6 +30,15 @@ const THRESHOLDS = {
 const PORT = 4331;
 const CATEGORIES = ["performance", "accessibility", "best-practices", "seo"];
 
+// Audits a page is meant to fail, because failing them is the correct behaviour.
+// A category is only gated on audits outside this list.
+const EXPECTED = {
+  // An error page must never be indexed. Cloudflare serves this file with a real 404
+  // status, and the noindex tag covers the case where a host answers 200 instead.
+  // The preview server answers 200, so Lighthouse reads the tag as a mistake.
+  "/404": ["is-crawlable"],
+};
+
 const args = process.argv.slice(2);
 const only = args.find((a) => a === "--mobile" || a === "--desktop")?.slice(2);
 // --base https://example.com audits a deployed site instead of building locally.
@@ -117,20 +126,27 @@ for (const path of paths) {
     await writeFile(file, report);
 
     const scores = Object.fromEntries(CATEGORIES.map((c) => [c, pct(lhr.categories[c].score)]));
-    const below = CATEGORIES.filter((c) => scores[c] < THRESHOLDS[c]);
+    const expected = EXPECTED[path] ?? [];
+
+    // Anything scoring below 1 is what to fix, in impact order.
+    const failing = CATEGORIES.flatMap((c) =>
+      lhr.categories[c].auditRefs
+        .filter((ref) => { const a = lhr.audits[ref.id];
+          return a.score !== null && a.score < 1 && ref.weight > 0 && !expected.includes(ref.id); })
+        .map((ref) => ({ cat: c, weight: ref.weight, title: lhr.audits[ref.id].title }))
+    ).sort((a, b) => b.weight - a.weight);
+
+    // A low score with nothing left to fix is the page behaving as designed.
+    const below = CATEGORIES.filter(
+      (c) => scores[c] < THRESHOLDS[c] && failing.some((f) => f.cat === c)
+    );
+    const excused = CATEGORIES.filter((c) => scores[c] < THRESHOLDS[c] && !below.includes(c));
     if (below.length) failed = true;
 
-    rows.push({ path, factor, file, ...scores,
+    rows.push({ path, factor, file, ...scores, below, excused, failing,
       lcp: lhr.audits["largest-contentful-paint"].displayValue,
       cls: lhr.audits["cumulative-layout-shift"].displayValue,
       tbt: lhr.audits["total-blocking-time"].displayValue,
-      // Anything scoring below 1 is what to fix, in impact order.
-      failing: CATEGORIES.flatMap((c) =>
-        lhr.categories[c].auditRefs
-          .filter((ref) => { const a = lhr.audits[ref.id];
-            return a.score !== null && a.score < 1 && ref.weight > 0; })
-          .map((ref) => ({ cat: c, weight: ref.weight, title: lhr.audits[ref.id].title }))
-      ).sort((a, b) => b.weight - a.weight),
     });
   }
 }
@@ -141,7 +157,7 @@ shutdown();
 console.log(`\n${pad("page", 22)}${pad("form", 9)}${pad("perf", 6)}${pad("a11y", 6)}${pad("best", 6)}${pad("seo", 6)}${pad("LCP", 9)}${pad("CLS", 7)}TBT`);
 console.log("-".repeat(84));
 for (const r of rows) {
-  const mark = (n, c) => (n >= THRESHOLDS[c] ? `${n}` : `${n}*`);
+  const mark = (n, c) => (r.below.includes(c) ? `${n}*` : r.excused.includes(c) ? `${n}~` : `${n}`);
   console.log(
     pad(r.path, 22) + pad(r.factor, 9) +
     pad(mark(r.performance, "performance"), 6) + pad(mark(r.accessibility, "accessibility"), 6) +
@@ -153,6 +169,10 @@ for (const r of rows) {
 for (const r of rows.filter((r) => r.failing.length)) {
   console.log(`\n${r.path} (${r.factor}) — what to fix, highest impact first:`);
   for (const f of r.failing.slice(0, 8)) console.log(`  [${f.cat}] ${f.title}`);
+}
+
+for (const r of rows.filter((r) => r.excused.length)) {
+  console.log(`\n${r.path} (${r.factor}) — ${r.excused.join(", ")} scored low only on audits this page is meant to fail: ${(EXPECTED[r.path] ?? []).join(", ")}`);
 }
 
 console.log("\nfull reports (open in a browser):");
