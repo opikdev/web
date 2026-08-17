@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import SectionHeader from '../components/SectionHeader.astro';
+import { availability } from '../data/availability.ts';
 import me from '../assets/me.jpg';
 
 const path = [
@@ -53,7 +54,7 @@ const principles = [
 const now = [
   'Building Orbit, a desktop app for orchestrating AI agents.',
   'Writing about where LLM features actually break in production.',
-  'Open to remote roles, and taking project work now.',
+  availability.sentence,
 ];
 
 const person = {
@@ -167,7 +168,7 @@ const person = {
 
     <div class="flex shrink-0 items-center gap-3">
       <a
-        href="mailto:hi@opik.dev"
+        href="/hire"
         class="rounded-pill bg-accent px-4 py-2.25 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
       >
         Hire me

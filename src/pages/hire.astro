@@ -1,0 +1,161 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Availability from '../components/Availability.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+
+const openTo = [
+  {
+    title: 'Full-time, remote',
+    detail: 'A product or platform team where I can own delivery. Contract, EOR, or direct employment.',
+  },
+  {
+    title: 'Project work',
+    detail: 'Fixed scope, from first prototype to shipped release. Available now.',
+  },
+  {
+    title: 'Consulting',
+    detail:
+      'Short engagements when a workflow or LLM system costs more than it should. Days, not months.',
+  },
+];
+
+const steps = [
+  {
+    title: 'Tell me the problem',
+    detail: 'One email with what is broken, or what you want to build. No brief needed.',
+  },
+  {
+    title: 'We talk for thirty minutes',
+    detail: 'I ask what the bottleneck actually is. Sometimes that call is the whole engagement.',
+  },
+  {
+    title: 'You get a plan and a price',
+    detail: 'Scope, timeline, and what I would not build. Fixed price where the scope is clear.',
+  },
+  {
+    title: 'I build it',
+    detail: 'Weekly demos, written updates, and code you own from the first commit.',
+  },
+];
+
+const fit = [
+  {
+    title: 'A good fit if',
+    dot: 'bg-accent-strong',
+    items: [
+      'You have a real problem and some idea of what it costs you.',
+      'You want someone who will push back on scope.',
+      'You work async, or are happy to.',
+    ],
+  },
+  {
+    title: 'Probably not if',
+    dot: 'bg-text-3',
+    items: [
+      'You need someone on site, or on US business hours.',
+      'You want AI in it because it is AI.',
+      'Scope has to be decided by committee.',
+    ],
+  },
+];
+---
+
+<Layout
+  title="Hire me — Opik, full-stack engineer and technical lead"
+  description="Join your team or take a problem off your plate. Full-time remote, fixed-scope project work, or short consulting engagements. Based in Bogor, Indonesia, UTC+7."
+>
+  <section class="flex flex-col gap-2.5 pt-7.5">
+    <Availability />
+
+    <h1 class="text-lg leading-8 font-medium text-text-1">Hire me</h1>
+
+    <p class="max-w-155 text-base leading-5.5 text-text-2">
+      Two ways to work together: join your team, or take a problem off your plate.<br />
+      The first conversation is free, and I will tell you if I am the wrong person for it.
+    </p>
+  </section>
+
+  <section class="pt-11.5">
+    <SectionHeader title="What I am open to" pad={18} />
+
+    <ul class="grid gap-6 sm:grid-cols-3">
+      {
+        openTo.map((item) => (
+          <li class="border-t border-border pt-3.5">
+            <h3 class="text-sm font-medium text-text-1">{item.title}</h3>
+            <p class="mt-1.5 text-xs leading-normal text-text-3">{item.detail}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="pt-11.5">
+    <SectionHeader title="How it works" />
+
+    <ol>
+      {
+        steps.map((step, i) => (
+          <li class="flex gap-6 border-b border-border py-4 last:border-b-0">
+            <span class="w-9 shrink-0 text-xs text-text-3" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-sm font-medium text-text-1">{step.title}</h3>
+              <p class="mt-1.25 text-xs leading-normal text-text-3">{step.detail}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="pt-11.5">
+    <SectionHeader title="Before you write" pad={18} />
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      {
+        fit.map((group) => (
+          <div class="border-t border-border pt-3.5">
+            <h3 class="text-sm font-medium text-text-1">{group.title}</h3>
+            <ul class="pt-2">
+              {group.items.map((item) => (
+                <li class="flex gap-2.5 py-1.75">
+                  <span
+                    class={`mt-1.75 size-1.25 shrink-0 rounded-full ${group.dot}`}
+                    aria-hidden="true"
+                  />
+                  <p class="min-w-0 flex-1 text-xs leading-normal text-text-3">{item}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="pt-11.5">
+    <div class="flex flex-col gap-4.5 rounded-card bg-surface px-7.5 py-7">
+      <p class="text-base font-medium text-text-1">Send one email. Tell me what is broken.</p>
+
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-3">
+          <a
+            href="mailto:hi@opik.dev"
+            class="rounded-pill bg-accent px-4 py-2.25 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
+          >
+            hi@opik.dev
+          </a>
+          <a href="/cv.pdf" class="text-sm text-text-2 transition-colors hover:text-text-1">
+            Download CV
+          </a>
+        </div>
+
+        <p class="text-xs text-text-3">
+          Bogor, Indonesia &nbsp;·&nbsp; UTC+7 &nbsp;·&nbsp; I reply within a day
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
