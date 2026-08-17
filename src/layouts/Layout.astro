@@ -10,6 +10,16 @@ interface Props {
 
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const blinkers = [
+  { top: '11%', left: '17%', blink: '9s', delay: '0s' },
+  { top: '26%', left: '68%', blink: '13s', delay: '3s' },
+  { top: '38%', left: '8%', blink: '11s', delay: '6s' },
+  { top: '54%', left: '84%', blink: '15s', delay: '1s' },
+  { top: '63%', left: '35%', blink: '10s', delay: '8s' },
+  { top: '79%', left: '58%', blink: '14s', delay: '4s' },
+  { top: '88%', left: '23%', blink: '12s', delay: '10s' },
+];
 ---
 
 <!doctype html>
@@ -37,6 +47,43 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body class="flex min-h-screen flex-col">
+    <div class="sky" aria-hidden="true">
+      <div class="sky-layer sky-far"></div>
+      <div class="sky-layer sky-mid"></div>
+      <div class="sky-layer sky-near"></div>
+      {
+        blinkers.map((star) => (
+          <span
+            class="twinkle"
+            style={`top:${star.top};left:${star.left};--blink:${star.blink};--blink-delay:${star.delay}`}
+          />
+        ))
+      }
+      <span class="shooting"></span>
+      <span class="shooting"></span>
+    </div>
+
+    <script is:inline>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const between = (min, max) => Math.random() * (max - min) + min;
+
+        for (const streak of document.querySelectorAll('.shooting')) {
+          const place = () => {
+            streak.style.setProperty('--sy', between(2, 74) + '%');
+            streak.style.setProperty('--sx', between(-22, 26) + '%');
+            streak.style.setProperty('--sr', between(6, 44) + 'deg');
+            streak.style.setProperty('--sw', between(70, 145) + 'px');
+            streak.style.setProperty('--sdist', between(42, 88) + 'vw');
+            streak.style.setProperty('--sdur', between(26, 54) + 's');
+            streak.style.setProperty('--sdelay', between(2, 24) + 's');
+          };
+
+          place();
+          streak.addEventListener('animationiteration', place);
+        }
+      }
+    </script>
+
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-6 focus:rounded-pill focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:text-accent-ink"
