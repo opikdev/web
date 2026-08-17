@@ -1,0 +1,10 @@
+---
+import { availability } from '../data/availability.ts';
+
+const separator = '\u00A0·\u00A0';
+---
+
+<p class="flex items-center gap-2 text-xs text-text-3">
+  <span class="size-1.5 shrink-0 rounded-full bg-accent-strong" aria-hidden="true"></span>
+  {availability.parts.join(separator)}
+</p>

@@ -1,14 +1,12 @@
 ---
 import { Image } from 'astro:assets';
+import Availability from './Availability.astro';
 import me from '../assets/me.jpg';
 ---
 
 <section class="flex items-center justify-between gap-11 pt-7.5">
   <div class="flex min-w-0 flex-1 flex-col gap-2.5">
-    <p class="flex items-center gap-2 text-xs text-text-3">
-      <span class="size-1.5 rounded-full bg-accent-strong" aria-hidden="true"></span>
-      Open to remote roles
-    </p>
+    <Availability />
 
     <h1 class="text-lg leading-8 font-medium text-text-1">
       I build software that solves the real problem.<br />
