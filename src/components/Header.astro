@@ -1,0 +1,56 @@
+---
+import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+const nav = [
+  { label: 'Work', href: '/work' },
+  { label: 'Writing', href: '/writing' },
+  { label: 'About', href: '/about' },
+];
+
+const path = Astro.url.pathname;
+---
+
+<header class="mx-auto w-full max-w-site px-6 pt-10">
+  <div class="flex items-end justify-between gap-6 border-b border-border pb-[18px]">
+    <div>
+      <a href="/" class="inline-block" aria-label="Opik, home">
+        <Logo class="h-5 w-auto" />
+      </a>
+      <p class="mt-1.5 text-xs text-text-3">
+        Full-stack engineer &nbsp;·&nbsp; Technical lead &nbsp;·&nbsp; AI integration
+      </p>
+    </div>
+
+    <div class="flex items-center gap-6">
+      <nav aria-label="Main">
+        <ul class="flex items-center gap-5">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={path.startsWith(item.href) ? 'page' : undefined}
+                  class="text-sm text-text-2 transition-colors hover:text-text-1 aria-[current=page]:text-text-1"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <ThemeToggle />
+      </div>
+
+      <a
+        href="mailto:hi@opik.dev"
+        class="rounded-pill bg-accent px-4 py-2 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
+      >
+        Hire me
+      </a>
+    </div>
+  </div>
+</header>

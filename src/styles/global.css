@@ -17,7 +17,7 @@
   --accent-ink: #10131a;
   --accent-strong: #beff30;
 
-  --logo-mark: var(--accent);
+  --logo-mark: var(--accent-strong);
   --logo-word: var(--text-1);
 }
 
