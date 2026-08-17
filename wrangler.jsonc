@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "opik-web",
+  "compatibility_date": "2026-08-17",
+
+  // Static-assets-only Worker: no server code, Cloudflare serves dist/ from the edge
+  // with Brotli, HTTP/3 and immutable caching for hashed assets.
+  "assets": {
+    "directory": "./dist",
+    // Astro emits real files per route, so a missing path is a genuine 404.
+    // Serving index.html for unknown paths would produce soft 404s.
+    "not_found_handling": "404-page"
+  }
+}

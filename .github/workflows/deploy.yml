@@ -1,0 +1,115 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Gate first. A page that fails the audit never reaches production.
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Determine routes to audit
+        id: routes
+        run: |
+          BASE="${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || 'HEAD~1' }}"
+          ROUTES=$(node scripts/changed-pages.mjs "$BASE" | tr '\n' ' ')
+          echo "routes=$ROUTES" >> "$GITHUB_OUTPUT"
+          echo "Auditing:${ROUTES:- (nothing affected)}"
+
+      - name: Audit changed routes
+        if: steps.routes.outputs.routes != ''
+        # Performance is gated slightly below 100 here: shared runners add jitter to
+        # TBT and a flaky red build teaches people to ignore red builds. The other
+        # three categories are deterministic and stay strict.
+        env:
+          LH_MIN_PERF: 95
+        run: npm run lh -- ${{ steps.routes.outputs.routes }}
+
+      - name: Upload reports
+        if: always() && steps.routes.outputs.routes != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-lab
+          path: .lighthouse/
+          retention-days: 30
+
+  deploy:
+    needs: audit
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+      # Pull requests get a preview version rather than taking over production.
+      - name: Upload preview version
+        if: github.event_name == 'pull_request'
+        id: preview
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: versions upload
+
+      - name: Deploy to production
+        id: deploy
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+
+    outputs:
+      # Audit whatever was actually deployed, not a hardcoded domain. Until a custom
+      # domain is attached this is the workers.dev URL, and it keeps working unchanged
+      # afterwards.
+      url: ${{ steps.deploy.outputs.deployment-url }}
+
+  # Audits the live site on the real edge: Brotli, HTTP/3, cache headers.
+  # Reports only. The deploy already happened, so failing the job would not undo it,
+  # and a red X on a healthy site trains you to ignore red Xs.
+  verify:
+    needs: deploy
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.deploy.outputs.url != ''
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Audit what was just deployed
+        run: npm run lh -- / --base=${{ needs.deploy.outputs.url }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-production
+          path: .lighthouse/
+          retention-days: 30
