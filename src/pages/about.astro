@@ -1,0 +1,185 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import me from '../assets/me.jpg';
+
+const path = [
+  {
+    period: 'Now',
+    role: 'Technical lead',
+    detail: 'Architecture, delivery, and the calls that are expensive to get wrong.',
+  },
+  {
+    period: 'Previously',
+    role: 'Squad lead',
+    detail:
+      'Led a squad of engineers and solution consultants. Sat between what the business wanted and what we could actually build.',
+  },
+  {
+    period: 'Previously',
+    role: 'Front-end lead',
+    detail: 'Owned the front end and the standards around it.',
+  },
+  {
+    period: 'From 2015',
+    role: 'Full-stack developer',
+    detail: 'Shipping features end to end, mostly on the web.',
+  },
+];
+
+const principles = [
+  {
+    title: 'Problem first',
+    detail:
+      'I want to understand the bottleneck before anyone picks a tool. Often the fix is a script, an integration, or deleting a step.',
+  },
+  {
+    title: 'Written by default',
+    detail:
+      'I work async with teams four to twelve hours away. Decisions land in writing, so nobody has to be awake to unblock me.',
+  },
+  {
+    title: 'Simple over clever',
+    detail: 'Code that still makes sense a year later beats code that impressed someone in review.',
+  },
+  {
+    title: 'AI when it earns it',
+    detail:
+      'I use AI every day and reach for it when it fits the problem. Just as often the answer is a script, a scheduled job, or a tool you already pay for.',
+  },
+];
+
+const now = [
+  'Building Orbit, a desktop app for orchestrating AI agents.',
+  'Writing about where LLM features actually break in production.',
+  'Open to remote roles, and taking project work now.',
+];
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Opik',
+  url: new URL('/', Astro.site).href,
+  email: 'hi@opik.dev',
+  jobTitle: 'Technical lead',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Bogor',
+    addressCountry: 'ID',
+  },
+  knowsAbout: ['Full-stack engineering', 'AI integration', 'Web performance', 'Technical leadership'],
+  sameAs: [
+    'https://github.com/opikdev',
+    'https://x.com/opikdev',
+    'https://linkedin.com/in/opikdev',
+  ],
+};
+---
+
+<Layout
+  title="About Opik — Full-stack engineer and technical lead"
+  description="Full-stack engineer and technical lead in Bogor, Indonesia. A decade of shipping web products, and a habit of reaching for AI only when it beats the simpler fix."
+>
+  <section class="flex items-start justify-between gap-11 pt-7.5">
+    <div class="flex min-w-0 flex-1 flex-col gap-2.5">
+      <h1 class="text-lg leading-8 font-medium text-text-1">About</h1>
+      <p class="max-w-160 text-base leading-5.5 text-text-2">
+        I build software that solves the real problem, and I am fairly stubborn about not reaching
+        for AI when something simpler would do. Most of my work sits between a business problem and
+        the code that fixes it.
+      </p>
+    </div>
+
+    <Image
+      src={me}
+      alt="Opik"
+      width={272}
+      height={272}
+      loading="eager"
+      fetchpriority="high"
+      class="size-34 shrink-0 rounded-2xl object-cover"
+    />
+  </section>
+
+  <section class="pt-11.5">
+    <SectionHeader title="Path" />
+
+    <ul>
+      {
+        path.map((item) => (
+          <li class="flex gap-6 border-b border-border py-4 last:border-b-0">
+            <p class="w-20 shrink-0 text-xs text-text-3 sm:w-27.5">{item.period}</p>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-sm font-medium text-text-1">{item.role}</h3>
+              <p class="mt-1.25 text-xs leading-normal text-text-3">{item.detail}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="pt-11.5">
+    <SectionHeader title="How I work" pad={18} />
+
+    <ul class="grid gap-6 sm:grid-cols-2">
+      {
+        principles.map((item) => (
+          <li class="border-t border-border pt-3.5">
+            <h3 class="text-sm font-medium text-text-1">{item.title}</h3>
+            <p class="mt-1.5 text-xs leading-normal text-text-3">{item.detail}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="pt-11.5">
+    <SectionHeader title="Now" />
+
+    <ul>
+      {
+        now.map((item) => (
+          <li class="flex gap-3 border-b border-border py-3.25 last:border-b-0">
+            <span
+              class="mt-2 size-1.25 shrink-0 rounded-full bg-accent-strong"
+              aria-hidden="true"
+            />
+            <p class="min-w-0 flex-1 text-sm leading-5 text-text-2">{item}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section
+    class="flex flex-col items-start gap-5 border-t border-border pt-18 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+  >
+    <div>
+      <p class="text-base font-medium text-text-1">
+        Looking for someone to build it, or to tell you what to build?
+      </p>
+      <p class="mt-1.25 text-xs text-text-3">
+        Bogor, Indonesia &nbsp;·&nbsp; UTC+7 &nbsp;·&nbsp; Contract, EOR, or full-time
+      </p>
+    </div>
+
+    <div class="flex shrink-0 items-center gap-3">
+      <a
+        href="mailto:hi@opik.dev"
+        class="rounded-pill bg-accent px-4 py-2.25 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
+      >
+        Hire me
+      </a>
+      <a
+        href="mailto:hi@opik.dev"
+        class="text-sm text-text-2 transition-colors hover:text-text-1"
+      >
+        hi@opik.dev
+      </a>
+    </div>
+  </section>
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(person)} />
+</Layout>
