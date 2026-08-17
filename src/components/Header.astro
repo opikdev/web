@@ -11,8 +11,10 @@ const nav = [
 const path = Astro.url.pathname;
 ---
 
-<header class="mx-auto w-full max-w-shell px-6 pt-10">
-  <div class="flex items-center justify-between gap-6 border-b border-border pb-4.5">
+<header class="mx-auto w-full max-w-shell px-6 pt-8 sm:pt-10">
+  <div
+    class="flex flex-col gap-4 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:pb-4.5"
+  >
     <div>
       <a href="/" class="inline-block" aria-label="Opik, home">
         <Logo class="h-5 w-auto" />
@@ -22,7 +24,7 @@ const path = Astro.url.pathname;
       </p>
     </div>
 
-    <div class="flex items-center gap-6">
+    <div class="flex items-center justify-between gap-5 sm:justify-end sm:gap-6">
       <nav aria-label="Main">
         <ul class="flex items-center gap-5">
           {
@@ -41,16 +43,16 @@ const path = Astro.url.pathname;
         </ul>
       </nav>
 
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3 sm:gap-6">
         <ThemeToggle />
-      </div>
 
-      <a
-        href="/hire"
-        class="rounded-pill bg-accent px-4 py-2 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
-      >
-        Hire me
-      </a>
+        <a
+          href="/hire"
+          class="rounded-pill bg-accent px-4 py-2 text-sm font-medium whitespace-nowrap text-accent-ink transition-opacity hover:opacity-90"
+        >
+          Hire me
+        </a>
+      </div>
     </div>
   </div>
 </header>

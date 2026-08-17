@@ -30,6 +30,11 @@ jobs:
       - name: Check colour contrast in both palettes
         run: npm run contrast
 
+      # Every route, every phone width. A layout change on one page usually rides
+      # in on a shared component, so auditing only changed routes would miss it.
+      - name: Check for horizontal overflow
+        run: npm run overflow
+
       - name: Determine routes to audit
         id: routes
         run: |

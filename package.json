@@ -12,7 +12,8 @@
     "astro": "astro",
     "lh": "node scripts/lighthouse.mjs",
     "deploy": "wrangler deploy",
-    "contrast": "node scripts/contrast.mjs"
+    "contrast": "node scripts/contrast.mjs",
+    "overflow": "node scripts/overflow.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
