@@ -16,6 +16,7 @@
   --accent: #beff30;
   --accent-ink: #10131a;
   --accent-strong: #beff30;
+  --accent-text: #beff30;
 
   --logo-mark: var(--accent-strong);
   --logo-word: var(--text-1);
@@ -38,6 +39,7 @@
     --toggle-track: #ededea;
     --toggle-active: #ffffff;
     --accent-strong: #66880f;
+    --accent-text: #57730c;
   }
 }
 
@@ -54,6 +56,7 @@
   --toggle-track: #ededea;
   --toggle-active: #ffffff;
   --accent-strong: #66880f;
+  --accent-text: #57730c;
 }
 
 @theme inline {
@@ -71,6 +74,7 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-accent-strong: var(--accent-strong);
+  --color-accent-text: var(--accent-text);
 }
 
 @theme {
