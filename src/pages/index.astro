@@ -1,6 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Intro from '../components/Intro.astro';
+import Services from '../components/Services.astro';
+import WorkCarousel from '../components/WorkCarousel.astro';
+import PostGrid from '../components/PostGrid.astro';
 ---
 
-<Layout title="Opik" description="Full-stack engineer, technical lead, AI integration.">
+<Layout
+  title="Opik — Full-stack engineer and technical lead"
+  description="I build software that solves the real problem. Full-stack engineering, AI integration, and workflow consultation. Open to remote roles from Bogor, Indonesia."
+>
+  <Intro />
+  <Services />
+  <WorkCarousel />
+  <PostGrid />
 </Layout>

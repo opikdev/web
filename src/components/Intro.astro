@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import me from '../assets/me.jpg';
+---
+
+<section class="flex items-center justify-between gap-11 pt-7.5">
+  <div class="flex min-w-0 flex-1 flex-col gap-2.5">
+    <p class="flex items-center gap-2 text-xs text-text-3">
+      <span class="size-1.5 rounded-full bg-accent-strong" aria-hidden="true"></span>
+      Open to remote roles
+    </p>
+
+    <h1 class="text-lg leading-[1.35] font-medium text-text-1">
+      I build software that solves the real problem.<br />
+      Sometimes that needs AI, often it doesn't.
+    </h1>
+
+    <p class="max-w-160 text-base leading-[1.6] text-text-2">
+      I've been building for the web professionally since 2015: full-stack developer, front-end
+      lead, then leading a squad of engineers and solution consultants. I like software that stays
+      simple and still makes sense a year later.
+    </p>
+
+    <p class="text-xs text-text-3">
+      Bogor, Indonesia &nbsp;·&nbsp; UTC+7 &nbsp;·&nbsp; Full overlap with SG and AU, 4 to 6 hours
+      with Europe, async with US teams &nbsp;·&nbsp; Contract, EOR, or full-time
+    </p>
+  </div>
+
+  <Image
+    src={me}
+    alt="Opik"
+    width={272}
+    height={272}
+    loading="eager"
+    fetchpriority="high"
+    class="size-34 shrink-0 rounded-2xl object-cover"
+  />
+</section>

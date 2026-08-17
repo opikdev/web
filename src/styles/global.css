@@ -85,6 +85,7 @@
   --radius-pill: 999px;
 
   --container-site: 960px;
+  --container-shell: 63rem;
 }
 
 @layer base {

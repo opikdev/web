@@ -1,0 +1,44 @@
+---
+import SectionHeader from './SectionHeader.astro';
+
+const services = [
+  {
+    title: 'Product & full-stack',
+    detail: 'Web apps end to end, from the first prototype to something a team can actually run.',
+  },
+  {
+    title: 'AI features, where they earn it',
+    detail:
+      'Agents, tool calling, and retrieval. I build them when they beat the simpler option, not by default.',
+  },
+  {
+    title: 'Workflow consultation',
+    detail:
+      'Find the real bottleneck first, then fix it with automation, off-the-shelf tools, or custom software.',
+  },
+];
+---
+
+<section class="pt-11">
+  <SectionHeader title="What I can help with" pad={18}>
+    <div slot="actions" class="flex items-center gap-4">
+      <a href="mailto:hi@opik.dev" class="text-xs text-text-2 transition-colors hover:text-text-1">
+        hi@opik.dev
+      </a>
+      <a href="/cv.pdf" class="text-xs text-text-2 transition-colors hover:text-text-1">
+        Download CV
+      </a>
+    </div>
+  </SectionHeader>
+
+  <ul class="grid gap-6 sm:grid-cols-3">
+    {
+      services.map((s) => (
+        <li class="border-t border-border pt-3.5">
+          <h3 class="text-sm font-medium text-text-1">{s.title}</h3>
+          <p class="mt-1.5 text-xs leading-[1.5] text-text-3">{s.detail}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

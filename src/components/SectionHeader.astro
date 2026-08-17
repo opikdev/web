@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  linkLabel?: string;
+  linkHref?: string;
+  pad?: number;
+}
+const { title, linkLabel, linkHref, pad = 16 } = Astro.props;
+---
+
+<div class="flex items-center justify-between gap-4" style={`padding-bottom:${pad}px`}>
+  <h2 class="text-xs font-medium text-text-3">{title}</h2>
+  <div class="flex items-center gap-2.5">
+    {
+      linkLabel && linkHref && (
+        <a href={linkHref} class="text-xs text-text-2 transition-colors hover:text-text-1">
+          {linkLabel}
+        </a>
+      )
+    }
+    <slot name="actions" />
+  </div>
+</div>

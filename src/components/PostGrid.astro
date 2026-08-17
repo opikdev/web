@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import SectionHeader from './SectionHeader.astro';
+import { posts } from '../data/posts.ts';
+import { formatPostDate, absoluteDate } from '../lib/date.ts';
+
+const items = posts.slice(0, 8);
+---
+
+<section class="pt-11.5">
+  <SectionHeader title="Blog" linkLabel="All posts" linkHref="/blog" />
+
+  <ul class="grid sm:grid-cols-2 sm:gap-x-6">
+    {
+      items.map((post, i) => (
+        <li class:list={['border-b border-border', i >= items.length - 2 && 'sm:border-b-0']}>
+          <a href={`/blog/${post.slug}`} class="group flex items-center gap-4 py-3.5">
+            <Image
+              src={post.cover}
+              alt=""
+              width={192}
+              height={128}
+              loading="lazy"
+              class="h-16 w-24 shrink-0 rounded-lg object-cover"
+            />
+            <div class="min-w-0">
+              <h3 class="text-base leading-[1.4] font-medium text-text-1 transition-colors group-hover:text-accent-strong">
+                {post.title}
+              </h3>
+              <p class="mt-1 text-xs text-text-3">
+                {post.topic} &nbsp;·&nbsp;
+                <time datetime={post.date} title={absoluteDate(post.date)}>
+                  {formatPostDate(post.date)}
+                </time>
+                &nbsp;·&nbsp; {post.readingMinutes} min read
+              </p>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>
