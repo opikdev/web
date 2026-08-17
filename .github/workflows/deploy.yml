@@ -25,6 +25,11 @@ jobs:
 
       - run: npm ci
 
+      # Runs on every push, not just changed routes: a token edit affects every page,
+      # and unlike Lighthouse this check does not depend on the runner's colour scheme.
+      - name: Check colour contrast in both palettes
+        run: npm run contrast
+
       - name: Determine routes to audit
         id: routes
         run: |

@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "lh": "node scripts/lighthouse.mjs",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "contrast": "node scripts/contrast.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
